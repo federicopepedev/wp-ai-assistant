@@ -1,0 +1,105 @@
+#ai-assistant {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    cursor: pointer;
+    z-index: 99999999;
+}
+
+.ai-wrapper {
+    background: black;
+    height: 50px;
+    width: 50px;
+    color: white;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 32px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+#ai-chat {
+    border-radius: 15px;
+    width: 350px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    border-color: rgba(0, 0, 0, 0.175);
+}
+
+#ai-close-chat {
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+}
+
+#ai-close-chat:hover {
+    background: #ff1919;
+}
+
+#ai-clear-chat {
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+}
+
+#ai-clear-chat:hover {
+    background: #0d6efd;
+}
+
+.card-header-custom {
+    border-radius: 15px 15px 0 0;
+    background-color: black;
+    font-size: 16px;
+}
+
+#ai-chat-wrapper {
+    height: 200px;
+    max-height: 200px;
+    overflow: auto;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.avatar-img {
+    width: 40px; 
+    height: 100%;
+}
+
+.ai-message {
+    border-radius: 15px; 
+    background-color: #dadada;
+    color: black;
+    max-width: 80%;
+}
+
+.user-message {
+    border-radius: 15px; 
+    background-color: #0d6efd;
+    color: white;
+    max-width: 80%;
+}
+
+#ai-send-button {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    font-size: 16px;
+}
+
+#ai-send-button:hover, #ai-send-button:active{
+    background: #0a58ca;
+    border-color: #0a58ca;
+}
+
+#ai-user-message {
+    border-color: #dee2e6;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 16px;
+}
+
+.card-body ::-webkit-scrollbar {
+    width: 10px;
+}
+
+.card-body ::-webkit-scrollbar-thumb {
+    background: #dadada; 
+    border-radius: 10px;
+}
