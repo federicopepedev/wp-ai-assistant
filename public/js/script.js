@@ -72,25 +72,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display message in the chat
     function displayMessage(message, type) {
         // Message container
-        let messageContainer = document.createElement('div');
+        const messageContainer = document.createElement('div');
         messageContainer.classList.add('d-flex', 'flex-row', 'mb-4');
         messageContainer.classList.add(type === 'ai' ? 'justify-content-start' : 'justify-content-end');
         // Avatar
-        let avatarImg = document.createElement('img');
+        const avatarImg = document.createElement('img');
         avatarImg.classList.add('avatar-img');
         avatarImg.src = `${aiAssistant.images}${type === 'ai' ? 'bot.png' : 'user.png'}`;
         // Message content
-        let messageContent = document.createElement('div');
+        const messageContent = document.createElement('div');
         messageContent.classList.add('p-3', type === 'ai' ? 'ms-3' : 'me-3', `${type}-message`);
         // Message text
-        let messageText = document.createElement('p');
+        const messageText = document.createElement('p');
         messageText.classList.add('small', 'mb-0');
         messageText.textContent = message;
         messageContent.appendChild(messageText);
+        // Copy message to clipboard
+        const copyIcon = document.createElement('i');
+        copyIcon.classList.add('fa-solid', 'fa-copy');
+        copyIcon.addEventListener('click', () => navigator.clipboard.writeText(message));
         // Avatar and message order
         if (type === 'ai') {
             messageContainer.appendChild(avatarImg);
             messageContainer.appendChild(messageContent);
+            messageContent.appendChild(copyIcon);
         } else {
             messageContainer.appendChild(messageContent);
             messageContainer.appendChild(avatarImg);
