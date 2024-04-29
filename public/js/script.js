@@ -90,7 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Copy message to clipboard
         const copyIcon = document.createElement('i');
         copyIcon.classList.add('fa-solid', 'fa-copy');
-        copyIcon.addEventListener('click', () => navigator.clipboard.writeText(message));
+        copyIcon.addEventListener('click', () => {
+            navigator.clipboard.writeText(message)
+            .then(() => copyIcon.classList.replace('fa-copy', 'fa-check'))
+        });
         // Avatar and message order
         if (type === 'ai') {
             messageContainer.appendChild(avatarImg);
