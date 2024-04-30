@@ -17,7 +17,7 @@ The AI Assistant WordPress plugin integrates an AI-driven chat feature on your W
 
 ## Installation
 
-1. Download the AI Assistant plugin from the WordPress repository or upload the plugin files to the `/wp-content/plugins/` directory of your site.
+1. Download the AI Assistant plugin from the [WordPress repository](https://wordpress.org/plugins/ai-assistant-gpt-chatbot/) or upload the plugin files to the `/wp-content/plugins/` directory of your site.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Navigate to the plugin's settings page (accessible from the admin menu) to enter your OpenAI API key.
 
