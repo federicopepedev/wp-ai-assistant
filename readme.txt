@@ -54,12 +54,17 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 
 == Changelog ==
 
+= 1.0.1 =
+* Added feature to copy messages to clipboard.
+* Increased max user message length.
+
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
 
-There is no need to upgrade just yet.
+= 1.0.1 =
+Added a new feature to copy messages to the clipboard and increased the maximum user message length.
 
 == License ==
 This plugin is licensed under the GPL v3 or later.
