@@ -3,7 +3,7 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
@@ -49,8 +49,8 @@ function ai_assistant_enqueue_assets() {
     // Font Awesome
     wp_enqueue_style('fontawesome-css', plugin_dir_url(__FILE__) . 'public/css/all.min.css', array(), '6.5.2');
     // Custom assets
-    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.0');
-    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.0', true);
+    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.1');
+    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.1', true);
     // Pass nonce and images url
     wp_localize_script('ai-assistant-js', 'aiAssistant', [
         'ajax_url' => admin_url('admin-ajax.php'),
@@ -84,8 +84,10 @@ function ai_assistant_handle_request() {
     check_ajax_referer('ai-assistant-nonce', 'nonce');
     // Sanitize user message
     $user_message = sanitize_text_field($_POST['user_message']);
+    // Max user message length
+    $max_message_length = 10000;
     // Check user message length
-    if (isset($user_message) && !empty($user_message) && strlen($user_message) < 1000) {
+    if (isset($user_message) && !empty($user_message) && strlen($user_message) < $max_message_length) {
         try {
             // Create chat
             $result = $client->chat()->create([
