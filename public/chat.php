@@ -5,14 +5,14 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 <!-- AI Assistant -->
 <div id="ai-assistant">
-  <div class="ai-wrapper">
+  <div class="ai-wrapper" style="background-color: <?php echo esc_attr(get_option('ai_assistant_icon_bg', '#000000')); ?>">
     AI
   </div>
 </div>
 
 <!-- AI Chat -->
 <div id="ai-chat" class="card z-3 invisible">
-    <div class="card-header-custom d-flex justify-content-between align-items-center p-3 text-white border-bottom-0">
+    <div class="card-header-custom d-flex justify-content-between align-items-center p-3 text-white border-bottom-0" style="background-color: <?php echo esc_attr(get_option('ai_assistant_header_bg', '#000000')); ?>">
       <div id="ai-clear-chat"><i class="fa-solid fa-trash-can"></i></div>
       <p class="mb-0 fw-bold">AI Assistant</p>
       <div id="ai-close-chat"><i class="fa-solid fa-xmark"></i></div>
