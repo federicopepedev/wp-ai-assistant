@@ -34,7 +34,18 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'ai-settings';
     </div>
     <!-- Style -->
     <div id="tab-style" class="tab-content" style="<?php echo $active_tab == 'style' ? '' : 'display:none;'; ?>">
-        <!-- Style settings will go here in the future -->
+    <form method="post" action="options.php">
+            <?php settings_fields('ai_assistant_style_options_group'); ?>
+            <p>
+                <label for="ai_assistant_header_bg">Chat Header Color:</label>
+                <input type="text" id="ai_assistant_header_bg" name="ai_assistant_header_bg" value="<?php echo esc_attr(get_option('ai_assistant_header_bg')); ?>" class="regular-text" />
+            </p>
+            <p>
+                <label for="ai_assistant_icon_bg">AI Icon Color:</label>
+                <input type="text" id="ai_assistant_icon_bg" name="ai_assistant_icon_bg" value="<?php echo esc_attr(get_option('ai_assistant_icon_bg')); ?>" class="regular-text" />
+            </p>
+            <?php submit_button(); ?>
+        </form>
     </div>
 </div>
 

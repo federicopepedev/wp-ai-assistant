@@ -22,8 +22,15 @@
  function ai_assistant_register_settings() {
     add_option('ai_assistant_api_key', '');
     add_option('ai_assistant_model', 'gpt-3.5-turbo');
+
+    add_option('ai_assistant_header_bg', '#000000');
+    add_option('ai_assistant_icon_bg', '#000000');
+
     register_setting('ai_assistant_options_group', 'ai_assistant_api_key', 'ai_assistant_callback');
     register_setting('ai_assistant_options_group', 'ai_assistant_model');
+    
+    register_setting('ai_assistant_style_options_group', 'ai_assistant_header_bg');
+    register_setting('ai_assistant_style_options_group', 'ai_assistant_icon_bg');
 }
 add_action('admin_init', 'ai_assistant_register_settings');
 
