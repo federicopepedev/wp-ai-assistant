@@ -6,20 +6,46 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 $apiKey = get_option('ai_assistant_api_key');
 // Get current model
 $model = get_option('ai_assistant_model');
+
+// Get the active tab from the URL, default to 'ai-settings'
+$active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'ai-settings';
 ?>
 
-<div class="wrapper">
+<div class="wrap">
     <h2>AI Assistant Settings</h2>
+    <h2 class="nav-tab-wrapper">
+        <a href="?page=ai-assistant&tab=ai-settings" class="nav-tab <?php echo $active_tab == 'ai-settings' ? 'nav-tab-active' : ''; ?>">AI Settings</a>
+        <a href="?page=ai-assistant&tab=style" class="nav-tab <?php echo $active_tab == 'style' ? 'nav-tab-active' : ''; ?>">Style</a>
+    </h2>
+    <!-- AI Settings -->
+    <div id="tab-ai-settings" class="tab-content" style="<?php echo $active_tab == 'ai-settings' ? '' : 'display:none;'; ?>">
+        <form method="post" action="options.php">
+            <?php settings_fields('ai_assistant_options_group'); ?>
+            <p>
+                <label for="ai_assistant_api_key">API Key:</label>
+                <input type="text" id="ai_assistant_api_key" name="ai_assistant_api_key" value="<?php echo esc_attr($apiKey); ?>" class="regular-text" />
+            </p>
+            <p>
+                <label for="ai_assistant_model">Model:</label>
+                <input type="text" id="ai_assistant_model" name="ai_assistant_model" value="<?php echo esc_attr($model); ?>" class="regular-text" />
+            </p>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <!-- Style -->
+    <div id="tab-style" class="tab-content" style="<?php echo $active_tab == 'style' ? '' : 'display:none;'; ?>">
     <form method="post" action="options.php">
-        <?php settings_fields('ai_assistant_options_group'); ?>
-        <p>
-            <label for="ai_assistant_api_key">API Key:</label>
-            <input type="text" id="ai_assistant_api_key" name="ai_assistant_api_key" value="<?php echo esc_attr($apiKey); ?>" class="regular-text" />
-        </p>
-        <p>
-            <label for="ai_assistant_model">Model:</label>
-            <input type="text" id="ai_assistant_model" name="ai_assistant_model" value="<?php echo esc_attr($model); ?>" class="regular-text" />
-        </p>
-        <?php submit_button(); ?>
-    </form>
+            <?php settings_fields('ai_assistant_style_options_group'); ?>
+            <p>
+                <label for="ai_assistant_header_bg">Chat Header Color:</label>
+                <input type="text" id="ai_assistant_header_bg" name="ai_assistant_header_bg" value="<?php echo esc_attr(get_option('ai_assistant_header_bg')); ?>" class="regular-text" />
+            </p>
+            <p>
+                <label for="ai_assistant_icon_bg">AI Icon Color:</label>
+                <input type="text" id="ai_assistant_icon_bg" name="ai_assistant_icon_bg" value="<?php echo esc_attr(get_option('ai_assistant_icon_bg')); ?>" class="regular-text" />
+            </p>
+            <?php submit_button(); ?>
+        </form>
+    </div>
 </div>
+
