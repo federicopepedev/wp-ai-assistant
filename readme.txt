@@ -3,7 +3,7 @@ Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
 Tested up to: 6.5.3
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 8.2
 License: GPL-3.0+
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -54,6 +54,10 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 
 == Changelog ==
 
+= 1.0.2 =
+* Set welcome message from admin page.
+* Custom chat style.
+
 = 1.0.1 =
 * Added feature to copy messages to clipboard.
 * Increased max user message length.
@@ -62,6 +66,9 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Feature to change welcome message and chat style.
 
 = 1.0.1 =
 Added a new feature to copy messages to the clipboard and increased the maximum user message length.
