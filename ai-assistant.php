@@ -20,14 +20,16 @@
 
  // AI Assistant admin settings
  function ai_assistant_register_settings() {
-    // AI Assistant Options
+    // AI Assistant options
     add_option('ai_assistant_api_key', '');
     add_option('ai_assistant_model', 'gpt-3.5-turbo');
+    add_option('ai_assistant_welcome_message', 'How can I assist you today?');
     add_option('ai_assistant_header_bg', '#000000');
     add_option('ai_assistant_icon_bg', '#000000');
-    // Register AI Assistant Options
+    // Register AI Assistant options
     register_setting('ai_assistant_options_group', 'ai_assistant_api_key', 'ai_assistant_callback');
     register_setting('ai_assistant_options_group', 'ai_assistant_model');
+    register_setting('ai_assistant_options_group', 'ai_assistant_welcome_message');
     register_setting('ai_assistant_style_options_group', 'ai_assistant_header_bg');
     register_setting('ai_assistant_style_options_group', 'ai_assistant_icon_bg');
 }
