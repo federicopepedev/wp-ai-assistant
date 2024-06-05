@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
           <div class="d-flex flex-row justify-content-start mb-4">
             <img class="avatar-img" src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'images/bot.png') ?>" alt="AI">
             <div class="p-3 ms-3 ai-message">
-              <p class="small mb-0">How can i assist you today?</p>
+              <p class="small mb-0"><?php echo esc_html(get_option('ai_assistant_welcome_message', 'How can I assist you today?')); ?></p>
             </div>
           </div>
       </div>
