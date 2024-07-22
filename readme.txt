@@ -2,7 +2,7 @@
 Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
-Tested up to: 6.5.5
+Tested up to: 6.6
 Stable tag: 1.0.2
 Requires PHP: 8.2
 License: GPL-3.0+
@@ -43,6 +43,8 @@ Upon setup, the AI chat feature will be available for visitor interaction.
 
 == Screenshots ==
 1. AI Assistant ChatBot
+2. AI Assistant Settings
+2. AI Assistant Screenshot
 
 == Contribute to AI Assistant ==
 If you're interested in contributing to the AI Assistant plugin, please visit [AI Assistant GitHub repository](https://github.com/federicopepedev/wp-ai-assistant/)
