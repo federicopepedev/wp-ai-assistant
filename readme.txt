@@ -3,7 +3,7 @@ Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
 Tested up to: 6.6
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 8.2
 License: GPL-3.0+
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -56,6 +56,9 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 
 == Changelog ==
 
+= 1.0.3 =
+* Update default OpenAI model.
+
 = 1.0.2 =
 * Set welcome message from admin page.
 * Custom chat style.
@@ -68,6 +71,9 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+* New default OpenAI model.
 
 = 1.0.2 =
 Feature to change welcome message and chat style.
