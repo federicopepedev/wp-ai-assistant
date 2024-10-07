@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 $apiKey = get_option('ai_assistant_api_key');
 // Get current model
 $model = get_option('ai_assistant_model');
-//Get system role
+// Get system role
 $system = get_option('ai_assistant_system');
 // Get welcome message
 $welcome_message = get_option('ai_assistant_welcome_message');
