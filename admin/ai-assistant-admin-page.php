@@ -6,6 +6,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 $apiKey = get_option('ai_assistant_api_key');
 // Get current model
 $model = get_option('ai_assistant_model');
+//Get system role
+$system = get_option('ai_assistant_system');
+// Get welcome message
+$welcome_message = get_option('ai_assistant_welcome_message');
 
 // Get the active tab from the URL, default to 'ai-settings'
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'ai-settings';
@@ -44,8 +48,12 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'ai-settings';
                 <input type="text" id="ai_assistant_model" name="ai_assistant_model" value="<?php echo esc_attr($model); ?>" />
             </p>
             <p>
+                <label for="ai_assistant_system">System Role:</label>
+                <input type="text" id="ai_assistant_system" name="ai_assistant_system" value="<?php echo esc_attr($system); ?>" />
+            </p>
+            <p>
                 <label for="ai_assistant_welcome_message">Welcome Message:</label>
-                <textarea id="ai_assistant_welcome_message" name="ai_assistant_welcome_message"><?php echo esc_attr(get_option('ai_assistant_welcome_message')); ?></textarea>
+                <textarea id="ai_assistant_welcome_message" name="ai_assistant_welcome_message"><?php echo esc_attr($welcome_message); ?></textarea>
             </p>
             <?php submit_button(); ?>
         </form>
