@@ -3,7 +3,7 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.0.3
+ * Version:           1.0.4
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
@@ -23,12 +23,14 @@
     // AI Assistant options
     add_option('ai_assistant_api_key', '');
     add_option('ai_assistant_model', 'gpt-4');
+    add_option('ai_assistant_system', 'You are a helpful assistant.');
     add_option('ai_assistant_welcome_message', 'How can I assist you today?');
     add_option('ai_assistant_header_bg', '#000000');
     add_option('ai_assistant_icon_bg', '#000000');
     // Register AI Assistant options
     register_setting('ai_assistant_options_group', 'ai_assistant_api_key', 'ai_assistant_callback');
     register_setting('ai_assistant_options_group', 'ai_assistant_model');
+    register_setting('ai_assistant_options_group', 'ai_assistant_system');
     register_setting('ai_assistant_options_group', 'ai_assistant_welcome_message');
     register_setting('ai_assistant_style_options_group', 'ai_assistant_header_bg');
     register_setting('ai_assistant_style_options_group', 'ai_assistant_icon_bg');
@@ -81,6 +83,8 @@ function ai_assistant_handle_request() {
     $yourApiKey = get_option('ai_assistant_api_key');
     // Retrieve model
     $model = get_option('ai_assistant_model');
+    // Retrieve system role
+    $system = get_option('ai_assistant_system');
     // Check if the API key or model is set
     if (empty($yourApiKey) || empty($model)) {
         wp_send_json_error('API Key or model is not set.');
@@ -101,6 +105,7 @@ function ai_assistant_handle_request() {
             $result = $client->chat()->create([
                 'model' => $model,
                 'messages' => [
+                    ['role'=> 'system', 'content' => $system],
                     ['role' => 'user', 'content' => $user_message],
                 ],
             ]);

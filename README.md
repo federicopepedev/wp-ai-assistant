@@ -1,6 +1,6 @@
 # AI Assistant: GPT ChatBot
 
-The AI Assistant WordPress plugin integrates an AI-driven chat feature on your WordPress site, offering visitors an engaging and interactive experience. By leveraging cutting-edge artificial intelligence technology provided by OpenAI, AI Assistant can proficiently answer visitors' inquiries, guide them through your website, and offer instant support and assistance.
+The AI Assistant WordPress plugin integrates an AI-driven chat feature on your WordPress site, offering visitors an engaging and interactive experience. By artificial intelligence technology provided by OpenAI, AI Assistant can proficiently answer visitors' inquiries and offer instant support and assistance.
 
 ## Benefits
 
