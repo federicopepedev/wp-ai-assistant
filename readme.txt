@@ -2,7 +2,7 @@
 Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
-Tested up to: 6.6
+Tested up to: 6.7.1
 Stable tag: 1.0.4
 Requires PHP: 8.2
 License: GPL-3.0+
