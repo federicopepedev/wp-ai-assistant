@@ -3,7 +3,7 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.0.5
+ * Version:           1.0.6
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
@@ -22,7 +22,7 @@
  function ai_assistant_register_settings() {
     // AI Assistant options
     add_option('ai_assistant_api_key', '');
-    add_option('ai_assistant_model', 'gpt-4');
+    add_option('ai_assistant_model', 'gpt-4o');
     add_option('ai_assistant_system', 'You are a helpful assistant.');
     add_option('ai_assistant_welcome_message', 'How can I assist you today?');
     add_option('ai_assistant_header_bg', '#000000');
@@ -55,12 +55,12 @@ function ai_assistant_enqueue_assets() {
     wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'public/css/bootstrap.min.css', array(), '5.3.3');
     wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'public/js/bootstrap.min.js', array(), '5.3.3', true);
     // DOMPurify
-    wp_enqueue_script('dompurify-js', plugin_dir_url(__FILE__) . 'public/js/purify.min.js', array(), '3.1.6', true);
+    wp_enqueue_script('dompurify-js', plugin_dir_url(__FILE__) . 'public/js/purify.min.js', array(), '3.2.4', true);
     // Font Awesome
     wp_enqueue_style('fontawesome-css', plugin_dir_url(__FILE__) . 'public/css/all.min.css', array(), '6.5.2');
     // Custom assets
-    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.5');
-    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.5', true);
+    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.6');
+    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.6', true);
     // Pass nonce and images url
     wp_localize_script('ai-assistant-js', 'aiAssistant', [
         'ajax_url' => admin_url('admin-ajax.php'),
