@@ -2,8 +2,8 @@
 Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
-Tested up to: 6.8.1
-Stable tag: 1.0.7
+Tested up to: 6.8.2
+Stable tag: 1.0.8
 Requires PHP: 8.2
 License: GPL-3.0+
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -56,6 +56,9 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 
 == Changelog ==
 
+= 1.0.8 =
+* Update packages.
+
 = 1.0.7 =
 * Update packages.
 
@@ -83,6 +86,9 @@ Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.8 =
+* Update packages.
 
 = 1.0.7 =
 * Update packages.

@@ -3,7 +3,7 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.0.7
+ * Version:           1.0.8
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
@@ -59,8 +59,8 @@ function ai_assistant_enqueue_assets() {
     // Font Awesome
     wp_enqueue_style('fontawesome-css', plugin_dir_url(__FILE__) . 'public/css/all.min.css', array(), '6.5.2');
     // Custom assets
-    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.7');
-    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.7', true);
+    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.8');
+    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.8', true);
     // Pass nonce and images url
     wp_localize_script('ai-assistant-js', 'aiAssistant', [
         'ajax_url' => admin_url('admin-ajax.php'),
