@@ -41,7 +41,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'ai-settings';
             <?php settings_fields('ai_assistant_options_group'); ?>
             <p>
                 <label for="ai_assistant_api_key">API Key:</label>
-                <input type="text" id="ai_assistant_api_key" name="ai_assistant_api_key" value="<?php echo esc_attr($apiKey); ?>" />
+                <input type="password" id="ai_assistant_api_key" name="ai_assistant_api_key" value="<?php echo esc_attr($apiKey); ?>" />
             </p>
             <p>
                 <label for="ai_assistant_model">Model:</label>

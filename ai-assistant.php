@@ -3,7 +3,7 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.0.8
+ * Version:           1.1.0
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
@@ -22,7 +22,7 @@
  function ai_assistant_register_settings() {
     // AI Assistant options
     add_option('ai_assistant_api_key', '');
-    add_option('ai_assistant_model', 'gpt-4o');
+    add_option('ai_assistant_model', 'gpt-5');
     add_option('ai_assistant_system', 'You are a helpful assistant.');
     add_option('ai_assistant_welcome_message', 'How can I assist you today?');
     add_option('ai_assistant_header_bg', '#000000');
@@ -79,21 +79,36 @@ add_action('wp_footer', 'ai_assistant_markup');
 
 // Handle AJAX request
 function ai_assistant_handle_request() {
+    // Check nonce for security
+    check_ajax_referer('ai-assistant-nonce', 'nonce');
     // Retrieve API Key
     $yourApiKey = get_option('ai_assistant_api_key');
     // Retrieve model
     $model = get_option('ai_assistant_model');
     // Retrieve system role
     $system = get_option('ai_assistant_system');
-    // Check if the API key or model is set
+    // IP Rate limit
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $key = 'ai_assistant_req_' . md5($ip);
+    $count = (int) get_transient($key);
+    // Check rate limit
+    if ($count >= 30) {
+        wp_send_json_error('Too many requests. Please wait.');
+        return;
+    }
+    set_transient($key, $count + 1, 60);
+    // Init API client
+    $client = OpenAI::client($yourApiKey);
+     // Check if the API key or model is set
     if (empty($yourApiKey) || empty($model)) {
         wp_send_json_error('API Key or model is not set.');
         return;
     }
-    // Init API client
-    $client = OpenAI::client($yourApiKey);
-    // Check nonce for security
-    check_ajax_referer('ai-assistant-nonce', 'nonce');
+    // Check if user message exist
+    if (!isset($_POST['user_message'])) {
+        wp_send_json_error('Invalid request.');
+        return;
+    }
     // Sanitize user message
     $user_message = sanitize_text_field($_POST['user_message']);
     // Max user message length
@@ -110,7 +125,8 @@ function ai_assistant_handle_request() {
                 ],
             ]);
             // Send response back
-            $message = $result->choices[0]->message->content;
+            $message_raw = $result->choices[0]->message->content;
+            $message = wp_kses_post($message_raw);
             wp_send_json_success($message);
         } catch (Exception $e) {
             // Handle Exception
