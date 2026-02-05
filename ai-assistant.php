@@ -59,8 +59,8 @@ function ai_assistant_enqueue_assets() {
     // Font Awesome
     wp_enqueue_style('fontawesome-css', plugin_dir_url(__FILE__) . 'public/css/all.min.css', array(), '6.5.2');
     // Custom assets
-    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.0.8');
-    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.0.8', true);
+    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.1.1');
+    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.1.1', true);
     // Pass nonce and images url
     wp_localize_script('ai-assistant-js', 'aiAssistant', [
         'ajax_url' => admin_url('admin-ajax.php'),
