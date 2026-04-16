@@ -3,7 +3,9 @@
     bottom: 15px;
     right: 15px;
     cursor: pointer;
-    z-index: 99999999;
+    z-index: 99999;
+    transform: translateZ(0);
+    isolation: isolate;
 }
 
 .ai-wrapper {
@@ -27,23 +29,17 @@
     border-color: rgba(0, 0, 0, 0.175);
 }
 
-#ai-close-chat {
-    padding: 2px 5px 2px 5px;
-    border-radius: 5px;
-}
-
-#ai-close-chat:hover {
-    background: #ff1919;
-}
-
+#ai-close-chat,
+#ai-expand-chat,
 #ai-clear-chat {
-    padding: 2px 5px 2px 5px;
+    padding: 2px 5px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
-#ai-clear-chat:hover {
-    background: #0d6efd;
-}
+#ai-close-chat:hover  { background: #ff1919; }
+#ai-clear-chat:hover  { background: #0d6efd; }
+#ai-expand-chat:hover { background: rgba(255,255,255,0.2); }
 
 .card-header-custom {
     border-radius: 15px 15px 0 0;
@@ -57,6 +53,17 @@
     overflow: auto;
     font-size: 18px;
     padding: 10px;
+    transition: height 0.3s ease;
+}
+
+/* Expanded state */
+#ai-chat.expanded {
+    width: min(560px, 92vw);
+}
+
+#ai-chat.expanded #ai-chat-wrapper {
+    height: 420px;
+    max-height: 420px;
 }
 
 .avatar-img {
@@ -83,6 +90,8 @@
     border-color: #0d6efd;
     font-size: 16px;
     color: white;
+    flex-shrink: 0;
+    align-self: flex-end;
 }
 
 #ai-send-button:hover, #ai-send-button:active{
@@ -101,6 +110,60 @@
 }
 
 .card-body ::-webkit-scrollbar-thumb {
-    background: #dadada; 
+    background: #dadada;
     border-radius: 10px;
+}
+
+/* Streaming cursor */
+.ai-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.85em;
+    background: #888;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-radius: 1px;
+    animation: ai-blink 0.9s step-end infinite;
+}
+
+@keyframes ai-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* Code formatting */
+.ai-message pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0 4px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.ai-message pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+.ai-message code {
+    background: #e8e8e8;
+    color: #c7254e;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 85%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.ai-message p {
+    margin-bottom: 6px;
+}
+
+.ai-message p:last-of-type {
+    margin-bottom: 0;
 }

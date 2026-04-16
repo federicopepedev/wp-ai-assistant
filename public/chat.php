@@ -15,7 +15,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
     <div class="card-header-custom d-flex justify-content-between align-items-center p-3 text-white border-bottom-0" style="background-color: <?php echo esc_attr(get_option('ai_assistant_header_bg', '#000000')); ?>">
       <div id="ai-clear-chat"><i class="fa-solid fa-trash-can"></i></div>
       <p class="mb-0 fw-bold">AI Assistant</p>
-      <div id="ai-close-chat"><i class="fa-solid fa-xmark"></i></div>
+      <div class="d-flex gap-2">
+        <div id="ai-expand-chat"><i class="fa-solid fa-expand"></i></div>
+        <div id="ai-close-chat"><i class="fa-solid fa-xmark"></i></div>
+      </div>
     </div>
 
     <div class="card-body">
@@ -29,10 +32,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
       </div>
 
       <form id="ai-chat-form">
-        <div class="my-3">
+        <div class="d-flex align-items-end gap-2 my-3">
           <textarea id="ai-user-message" name="ai-user-message" class="form-control" rows="3" placeholder="Type your message" required></textarea>
+          <button id="ai-send-button" name="ai-send-button" type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-        <button id="ai-send-button" name="ai-send-button" type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
       </form>
 
     </div>
