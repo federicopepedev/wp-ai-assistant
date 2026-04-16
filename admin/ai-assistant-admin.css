@@ -1,0 +1,28 @@
+.wrap .tab-content label {
+    display: block;
+    margin-bottom: 0.3em;
+}
+.wrap .tab-content input:not([type="checkbox"]):not([type="number"]):not([type="color"]),
+.wrap .tab-content textarea {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1em;
+}
+
+.wrap .tab-content input[type="number"] {
+    display: inline-block;
+    width: auto;
+    margin-bottom: 1em;
+}
+
+.wrap .tab-content input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-bottom: 0;
+}
+.wrap .tab-content input[type="color"] {
+    height: 40px;
+    padding: 2px 4px;
+    cursor: pointer;
+}

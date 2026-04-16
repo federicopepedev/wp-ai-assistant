@@ -2,8 +2,8 @@
 Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
-Tested up to: 6.9.1
-Stable tag: 1.1.1
+Tested up to: 6.9.4
+Stable tag: 1.2.0
 Requires PHP: 8.2
 License: GPL-3.0+
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -55,6 +55,14 @@ If you're interested in contributing to the AI Assistant plugin, please visit [A
 Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to the API section, and create a new API key.
 
 == Changelog ==
+
+= 1.2.0 =
+* Streaming responses via Server-Sent Events with automatic fallback for incompatible hosting.
+* Conversation history: the AI now remembers previous messages in the session.
+* Chat persisted in localStorage with 24-hour expiration.
+* Markdown rendering for AI responses (code blocks, inline code, bold, italic).
+* Security hardening: input sanitization, capability check on admin page, rate limit ordering fix.
+* Admin: streaming toggle, configurable conversation history length, color picker inputs.
 
 = 1.1.1 =
 * Update packages.
