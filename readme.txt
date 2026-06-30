@@ -2,8 +2,8 @@
 Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
-Tested up to: 6.9.4
-Stable tag: 1.2.0
+Tested up to: 7.0
+Stable tag: 1.2.1
 Requires PHP: 8.2
 License: GPL-3.0+
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -55,6 +55,10 @@ If you're interested in contributing to the AI Assistant plugin, please visit [A
 Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to the API section, and create a new API key.
 
 == Changelog ==
+
+= 1.2.1 =
+* Updated DOMPurify to 3.4.11.
+* Tested up to WordPress 7.0.
 
 = 1.2.0 =
 * Streaming responses via Server-Sent Events with automatic fallback for incompatible hosting.

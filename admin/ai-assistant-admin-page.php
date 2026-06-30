@@ -43,11 +43,11 @@ if (!in_array($active_tab, $allowed_tabs, true)) {
             </p>
             <p>
                 <label for="ai_assistant_system">System Role:</label>
-                <input type="text" id="ai_assistant_system" name="ai_assistant_system" value="<?php echo esc_attr($system); ?>" />
+                <textarea id="ai_assistant_system" name="ai_assistant_system" rows="3"><?php echo esc_textarea($system); ?></textarea>
             </p>
             <p>
                 <label for="ai_assistant_welcome_message">Welcome Message:</label>
-                <textarea id="ai_assistant_welcome_message" name="ai_assistant_welcome_message"><?php echo esc_attr($welcome_message); ?></textarea>
+                <textarea id="ai_assistant_welcome_message" name="ai_assistant_welcome_message"><?php echo esc_textarea($welcome_message); ?></textarea>
             </p>
             <p>
                 <label for="ai_assistant_streaming">Enable Streaming:</label>

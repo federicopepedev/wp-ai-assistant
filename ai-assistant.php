@@ -3,33 +3,40 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.2.0
+ * Version:           1.2.1
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
  * Author URI:        http://github.com/federicopepedev/
  * License:           GPL-3.0+
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       ai-assistant
  */
 
  // If this file is called directly, abort.
  defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+// Plugin version — single source of truth for asset cache-busting.
+ define('AI_ASSISTANT_VERSION', '1.2.1');
+
 // Require composer autoloader to enable autoload of packages.
  require_once __DIR__ . '/vendor/autoload.php';
 
- // AI Assistant admin settings
- function ai_assistant_register_settings() {
-    // AI Assistant options
+ // Seed default options on activation (runs once, instead of on every admin load).
+ function ai_assistant_activate() {
     add_option('ai_assistant_api_key', '');
-    add_option('ai_assistant_model', 'gpt-5');
+    add_option('ai_assistant_model', 'gpt-5.4-mini');
     add_option('ai_assistant_system', 'You are a helpful assistant.');
     add_option('ai_assistant_welcome_message', 'How can I assist you today?');
     add_option('ai_assistant_header_bg', '#000000');
     add_option('ai_assistant_icon_bg', '#000000');
     add_option('ai_assistant_streaming', '1');
     add_option('ai_assistant_max_history', '20');
-    // Register AI Assistant options
+}
+register_activation_hook(__FILE__, 'ai_assistant_activate');
+
+ // Register AI Assistant settings
+ function ai_assistant_register_settings() {
     register_setting('ai_assistant_options_group', 'ai_assistant_api_key', 'sanitize_text_field');
     register_setting('ai_assistant_options_group', 'ai_assistant_model', 'sanitize_text_field');
     register_setting('ai_assistant_options_group', 'ai_assistant_system', 'sanitize_textarea_field');
@@ -49,7 +56,7 @@ function ai_assistant_admin_menu() {
 // AI Assistant admin page
 function ai_assistant_admin_page() {
     if (!current_user_can('manage_options')) {
-        wp_die(esc_html__('You do not have sufficient permissions to access this page.'));
+        wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'ai-assistant'));
     }
     include_once plugin_dir_path(__FILE__) . 'admin/ai-assistant-admin-page.php';
 }
@@ -60,7 +67,7 @@ function ai_assistant_enqueue_admin_assets($hook) {
     if ($hook !== 'toplevel_page_ai-assistant') {
         return;
     }
-    wp_enqueue_style('ai-assistant-admin-css', plugin_dir_url(__FILE__) . 'admin/ai-assistant-admin.css', array(), '1.2.0');
+    wp_enqueue_style('ai-assistant-admin-css', plugin_dir_url(__FILE__) . 'admin/ai-assistant-admin.css', array(), AI_ASSISTANT_VERSION);
 }
 add_action('admin_enqueue_scripts', 'ai_assistant_enqueue_admin_assets');
 
@@ -70,12 +77,12 @@ function ai_assistant_enqueue_assets() {
     wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'public/css/bootstrap.min.css', array(), '5.3.3');
     wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'public/js/bootstrap.min.js', array(), '5.3.3', true);
     // DOMPurify
-    wp_enqueue_script('dompurify-js', plugin_dir_url(__FILE__) . 'public/js/purify.min.js', array(), '3.2.4', true);
+    wp_enqueue_script('dompurify-js', plugin_dir_url(__FILE__) . 'public/js/purify.min.js', array(), '3.4.11', true);
     // Font Awesome
     wp_enqueue_style('fontawesome-css', plugin_dir_url(__FILE__) . 'public/css/all.min.css', array(), '6.5.2');
     // Custom assets
-    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), '1.2.0');
-    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), '1.2.0', true);
+    wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), AI_ASSISTANT_VERSION);
+    wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), AI_ASSISTANT_VERSION, true);
     // Pass config to JS
     wp_localize_script('ai-assistant-js', 'aiAssistant', [
         'ajax_url'    => admin_url('admin-ajax.php'),
@@ -102,19 +109,19 @@ function ai_assistant_validate_request() {
     $model      = get_option('ai_assistant_model');
 
     if (empty($yourApiKey) || empty($model)) {
-        wp_send_json_error('API Key or model is not set.');
+        wp_send_json_error(__('API Key or model is not set.', 'ai-assistant'));
         return false;
     }
 
     if (!isset($_POST['user_message'])) {
-        wp_send_json_error('Invalid request.');
+        wp_send_json_error(__('Invalid request.', 'ai-assistant'));
         return false;
     }
 
     $user_message = sanitize_text_field(wp_unslash($_POST['user_message']));
 
     if (empty($user_message) || strlen($user_message) >= 10000) {
-        wp_send_json_error('Please enter a valid message.');
+        wp_send_json_error(__('Please enter a valid message.', 'ai-assistant'));
         return false;
     }
 
@@ -123,7 +130,7 @@ function ai_assistant_validate_request() {
     $count = (int) get_transient($key);
 
     if ($count >= 30) {
-        wp_send_json_error('Too many requests. Please wait.');
+        wp_send_json_error(__('Too many requests. Please wait.', 'ai-assistant'));
         return false;
     }
 
@@ -179,7 +186,7 @@ function ai_assistant_handle_request() {
         $message_raw = $result->choices[0]->message->content;
         wp_send_json_success(wp_kses_post($message_raw));
     } catch (Exception $e) {
-        wp_send_json_error('Failed to connect to OpenAI API.');
+        wp_send_json_error(__('Failed to connect to OpenAI API.', 'ai-assistant'));
     }
 }
 add_action('wp_ajax_ai_assistant_chat', 'ai_assistant_handle_request');
@@ -221,7 +228,7 @@ function ai_assistant_handle_stream() {
         echo "data: [DONE]\n\n";
         flush();
     } catch (Exception $e) {
-        echo 'data: ' . wp_json_encode(['error' => 'Failed to connect to OpenAI API.']) . "\n\n";
+        echo 'data: ' . wp_json_encode(['error' => __('Failed to connect to OpenAI API.', 'ai-assistant')]) . "\n\n";
         flush();
     }
 
