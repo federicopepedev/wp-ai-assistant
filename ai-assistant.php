@@ -3,7 +3,7 @@
  * Plugin Name:       AI Assistant: GPT ChatBot
  * Plugin URI:        https://github.com/federicopepedev/wp-ai-assistant
  * Description:       Integrates an AI-driven chat feature on your WordPress site
- * Version:           1.2.1
+ * Version:           1.3.0
  * Requires at least: 6.4
  * Requires PHP:      8.2
  * Author:            federicopepedev
@@ -17,7 +17,7 @@
  defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 // Plugin version — single source of truth for asset cache-busting.
- define('AI_ASSISTANT_VERSION', '1.2.1');
+ define('AI_ASSISTANT_VERSION', '1.3.0');
 
 // Require composer autoloader to enable autoload of packages.
  require_once __DIR__ . '/vendor/autoload.php';
@@ -32,6 +32,10 @@
     add_option('ai_assistant_icon_bg', '#000000');
     add_option('ai_assistant_streaming', '1');
     add_option('ai_assistant_max_history', '20');
+    add_option('ai_assistant_captcha_enabled', '0');
+    add_option('ai_assistant_captcha_site_key', '');
+    add_option('ai_assistant_captcha_secret_key', '');
+    add_option('ai_assistant_captcha_threshold', '15');
 }
 register_activation_hook(__FILE__, 'ai_assistant_activate');
 
@@ -43,6 +47,10 @@ register_activation_hook(__FILE__, 'ai_assistant_activate');
     register_setting('ai_assistant_options_group', 'ai_assistant_welcome_message', 'sanitize_textarea_field');
     register_setting('ai_assistant_options_group', 'ai_assistant_streaming', 'absint');
     register_setting('ai_assistant_options_group', 'ai_assistant_max_history', 'absint');
+    register_setting('ai_assistant_options_group', 'ai_assistant_captcha_enabled', 'absint');
+    register_setting('ai_assistant_options_group', 'ai_assistant_captcha_site_key', 'sanitize_text_field');
+    register_setting('ai_assistant_options_group', 'ai_assistant_captcha_secret_key', 'sanitize_text_field');
+    register_setting('ai_assistant_options_group', 'ai_assistant_captcha_threshold', 'absint');
     register_setting('ai_assistant_style_options_group', 'ai_assistant_header_bg', 'sanitize_hex_color');
     register_setting('ai_assistant_style_options_group', 'ai_assistant_icon_bg', 'sanitize_hex_color');
 }
@@ -74,8 +82,8 @@ add_action('admin_enqueue_scripts', 'ai_assistant_enqueue_admin_assets');
 // Enqueue assets
 function ai_assistant_enqueue_assets() {
     // Bootstrap
-    wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'public/css/bootstrap.min.css', array(), '5.3.3');
-    wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'public/js/bootstrap.min.js', array(), '5.3.3', true);
+    wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'public/css/bootstrap.min.css', array(), '5.3.8');
+    wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'public/js/bootstrap.min.js', array(), '5.3.8', true);
     // DOMPurify
     wp_enqueue_script('dompurify-js', plugin_dir_url(__FILE__) . 'public/js/purify.min.js', array(), '3.4.11', true);
     // Font Awesome
@@ -83,13 +91,24 @@ function ai_assistant_enqueue_assets() {
     // Custom assets
     wp_enqueue_style('ai-assistant-css', plugin_dir_url(__FILE__) . 'public/css/style.css', array(), AI_ASSISTANT_VERSION);
     wp_enqueue_script('ai-assistant-js', plugin_dir_url(__FILE__) . 'public/js/script.js', array(), AI_ASSISTANT_VERSION, true);
+
+    // Google reCAPTCHA v3 — enqueued only when enabled and a site key is configured
+    $captcha_enabled  = get_option('ai_assistant_captcha_enabled', '0') === '1';
+    $captcha_site_key = get_option('ai_assistant_captcha_site_key', '');
+    if ($captcha_enabled && !empty($captcha_site_key)) {
+        wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . rawurlencode($captcha_site_key), array(), null, true);
+    }
+
     // Pass config to JS
     wp_localize_script('ai-assistant-js', 'aiAssistant', [
-        'ajax_url'    => admin_url('admin-ajax.php'),
-        'nonce'       => wp_create_nonce('ai-assistant-nonce'),
-        'images'      => plugin_dir_url(__FILE__) . 'public/images/',
-        'streaming'   => get_option('ai_assistant_streaming', '1'),
-        'max_history' => (int) get_option('ai_assistant_max_history', 20),
+        'ajax_url'          => admin_url('admin-ajax.php'),
+        'nonce'             => wp_create_nonce('ai-assistant-nonce'),
+        'images'            => plugin_dir_url(__FILE__) . 'public/images/',
+        'streaming'         => get_option('ai_assistant_streaming', '1'),
+        'max_history'       => (int) get_option('ai_assistant_max_history', 20),
+        'captcha_enabled'   => ($captcha_enabled && !empty($captcha_site_key)) ? '1' : '0',
+        'captcha_site_key'  => $captcha_site_key,
+        'captcha_threshold' => max(1, (int) get_option('ai_assistant_captcha_threshold', 15)),
     ]);
 }
 add_action('wp_enqueue_scripts', 'ai_assistant_enqueue_assets');
@@ -136,7 +155,60 @@ function ai_assistant_validate_request() {
 
     set_transient($key, $count + 1, 60);
 
+    // CAPTCHA gate — once the visitor exceeds the threshold, require a valid
+    // reCAPTCHA v3 token for every subsequent message (rolling 1-day window).
+    if (get_option('ai_assistant_captcha_enabled', '0') === '1') {
+        $secret = get_option('ai_assistant_captcha_secret_key', '');
+
+        if (!empty($secret)) {
+            $threshold  = max(1, (int) get_option('ai_assistant_captcha_threshold', 15));
+            $count_key  = 'ai_assistant_msgcount_' . md5($ip);
+            $sent       = (int) get_transient($count_key);
+            set_transient($count_key, $sent + 1, DAY_IN_SECONDS);
+
+            if ($sent >= $threshold) {
+                $token = sanitize_text_field(wp_unslash($_POST['captcha_token'] ?? ''));
+                if (!ai_assistant_verify_captcha($token, $secret, $ip)) {
+                    wp_send_json_error(__('Verification failed. Please refresh the page and try again.', 'ai-assistant'));
+                    return false;
+                }
+            }
+        }
+    }
+
     return $user_message;
+}
+
+// Verify a reCAPTCHA v3 token against Google's siteverify endpoint.
+// Returns true only on a successful response with an acceptable score.
+function ai_assistant_verify_captcha($token, $secret, $ip) {
+    if (empty($token)) {
+        return false;
+    }
+
+    $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+        'timeout' => 5,
+        'body'    => [
+            'secret'   => $secret,
+            'response' => $token,
+            'remoteip' => $ip,
+        ],
+    ]);
+
+    if (is_wp_error($response)) {
+        return false;
+    }
+
+    $body = json_decode(wp_remote_retrieve_body($response), true);
+
+    if (empty($body['success'])) {
+        return false;
+    }
+
+    // v3 returns a score in [0.0, 1.0]; 0.5 is Google's recommended default cut-off.
+    $score = isset($body['score']) ? (float) $body['score'] : 0.0;
+
+    return $score >= 0.5;
 }
 
 // Build the messages array for the OpenAI API, including conversation history.

@@ -14,6 +14,11 @@ $welcome_message = get_option('ai_assistant_welcome_message');
 $streaming       = get_option('ai_assistant_streaming', '1');
 // Get max history setting
 $max_history     = get_option('ai_assistant_max_history', '20');
+// Get captcha settings
+$captcha_enabled    = get_option('ai_assistant_captcha_enabled', '0');
+$captcha_site_key   = get_option('ai_assistant_captcha_site_key', '');
+$captcha_secret_key = get_option('ai_assistant_captcha_secret_key', '');
+$captcha_threshold  = get_option('ai_assistant_captcha_threshold', '15');
 
 // Get the active tab from the URL, sanitized, default to 'ai-settings'
 $active_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'ai-settings';
@@ -58,6 +63,28 @@ if (!in_array($active_tab, $allowed_tabs, true)) {
                 <label for="ai_assistant_max_history">Conversation History (messages):</label>
                 <input type="number" id="ai_assistant_max_history" name="ai_assistant_max_history" value="<?php echo esc_attr($max_history); ?>" min="2" max="40" step="2" style="max-width:80px;" />
                 <span class="description">How many past messages to send to the AI (2–40). Higher = more context, higher API cost.</span>
+            </p>
+
+            <hr />
+            <h3>Spam protection (reCAPTCHA v3)</h3>
+            <p>
+                <label for="ai_assistant_captcha_enabled">Enable reCAPTCHA:</label>
+                <input type="checkbox" id="ai_assistant_captcha_enabled" name="ai_assistant_captcha_enabled" value="1" <?php checked('1', $captcha_enabled); ?> />
+                <span class="description">Requires visitors to pass an invisible Google reCAPTCHA v3 check once they exceed the message threshold below.</span>
+            </p>
+            <p>
+                <label for="ai_assistant_captcha_site_key">reCAPTCHA Site Key:</label>
+                <input type="text" id="ai_assistant_captcha_site_key" name="ai_assistant_captcha_site_key" value="<?php echo esc_attr($captcha_site_key); ?>" style="min-width:320px;" />
+            </p>
+            <p>
+                <label for="ai_assistant_captcha_secret_key">reCAPTCHA Secret Key:</label>
+                <input type="password" id="ai_assistant_captcha_secret_key" name="ai_assistant_captcha_secret_key" value="<?php echo esc_attr($captcha_secret_key); ?>" style="min-width:320px;" />
+                <span class="description">Get both keys (v3) at <a href="https://www.google.com/recaptcha/admin" target="_blank" rel="noopener">google.com/recaptcha/admin</a>.</span>
+            </p>
+            <p>
+                <label for="ai_assistant_captcha_threshold">Challenge after (messages):</label>
+                <input type="number" id="ai_assistant_captcha_threshold" name="ai_assistant_captcha_threshold" value="<?php echo esc_attr($captcha_threshold); ?>" min="1" max="100" step="1" style="max-width:80px;" />
+                <span class="description">Number of messages a visitor may send before reCAPTCHA verification kicks in (per IP, rolling 24h).</span>
             </p>
             <?php submit_button(); ?>
         </form>

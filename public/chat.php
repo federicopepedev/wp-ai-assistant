@@ -38,5 +38,21 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
         </div>
       </form>
 
+      <?php
+      // reCAPTCHA attribution — required by Google's Terms when the badge is hidden.
+      // Shown only when reCAPTCHA is actually active (enabled + site key present).
+      if (get_option('ai_assistant_captcha_enabled', '0') === '1' && !empty(get_option('ai_assistant_captcha_site_key', ''))) : ?>
+        <p class="ai-recaptcha-notice">
+          <?php
+          printf(
+            /* translators: %1$s and %2$s are links to Google's Privacy Policy and Terms of Service. */
+            esc_html__('This site is protected by reCAPTCHA and the Google %1$s and %2$s apply.', 'ai-assistant'),
+            '<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">' . esc_html__('Privacy Policy', 'ai-assistant') . '</a>',
+            '<a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">' . esc_html__('Terms of Service', 'ai-assistant') . '</a>'
+          );
+          ?>
+        </p>
+      <?php endif; ?>
+
     </div>
 </div>

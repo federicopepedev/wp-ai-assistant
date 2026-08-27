@@ -3,7 +3,7 @@ Contributors: federicopepedev
 Tags: AI, chat, AI chatbot, assistant, OpenAI
 Requires at least: 6.4
 Tested up to: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 Requires PHP: 8.2
 License: GPL-3.0+
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -55,6 +55,11 @@ If you're interested in contributing to the AI Assistant plugin, please visit [A
 Visit [https://openai.com/](https://openai.com/), sign up or log in, navigate to the API section, and create a new API key.
 
 == Changelog ==
+
+= 1.3.0 =
+* Updated Bootstrap to 5.3.8.
+* Added optional Google reCAPTCHA v3 spam protection: invisible verification kicks in after a configurable message threshold (default 15) per IP.
+* Admin: enable/disable reCAPTCHA, site/secret keys, and challenge threshold settings.
 
 = 1.2.1 =
 * Updated DOMPurify to 3.4.11.

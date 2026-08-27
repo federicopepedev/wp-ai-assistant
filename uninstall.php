@@ -13,6 +13,10 @@ delete_option('ai_assistant_icon_bg');
 delete_option('ai_assistant_welcome_message');
 delete_option('ai_assistant_streaming');
 delete_option('ai_assistant_max_history');
+delete_option('ai_assistant_captcha_enabled');
+delete_option('ai_assistant_captcha_site_key');
+delete_option('ai_assistant_captcha_secret_key');
+delete_option('ai_assistant_captcha_threshold');
 
 // Delete rate limit transients
 global $wpdb;

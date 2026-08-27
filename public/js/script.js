@@ -117,6 +117,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Streaming is enabled only if the admin flag is set AND the browser supports ReadableStream
     const useStreaming = aiAssistant.streaming === '1' && typeof window.ReadableStream !== 'undefined';
 
+    // reCAPTCHA v3 is active only if enabled in admin AND a site key is present
+    const captchaEnabled = aiAssistant.captcha_enabled === '1' && !!aiAssistant.captcha_site_key;
+
+    // Resolve to a reCAPTCHA token (or empty string when unavailable). The server
+    // only enforces the token after the message threshold, so failures degrade
+    // gracefully — the request is still sent and rejected server-side if required.
+    function getCaptchaToken() {
+        if (!captchaEnabled || typeof grecaptcha === 'undefined') {
+            return Promise.resolve('');
+        }
+        return new Promise(resolve => {
+            grecaptcha.ready(() => {
+                grecaptcha
+                    .execute(aiAssistant.captcha_site_key, { action: 'chat' })
+                    .then(resolve)
+                    .catch(() => resolve(''));
+            });
+        });
+    }
+
     function sendMessage() {
         const userMessage = DOMPurify.sanitize(userMessageInput.value.trim());
         if (!userMessage) {
@@ -141,11 +161,16 @@ document.addEventListener('DOMContentLoaded', function() {
         data.append('user_message', userMessage);
         data.append('history', JSON.stringify(historyForApi));
 
-        if (useStreaming) {
-            sendStreaming(data);
-        } else {
-            sendJson(data);
-        }
+        getCaptchaToken().then(token => {
+            if (token) {
+                data.append('captcha_token', token);
+            }
+            if (useStreaming) {
+                sendStreaming(data);
+            } else {
+                sendJson(data);
+            }
+        });
     }
 
     // Streaming path
